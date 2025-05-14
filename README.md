@@ -1,2 +1,2 @@
 # **RAD-ALERT**
-![Banner](assets/banner.png) 
+![Banner](static/banner.png) 
