@@ -1,0 +1,7 @@
+data:
+  root_dir: ".\\data"
+  train_file: "train_df.xlsx"
+  val_file:   "val_df.xlsx"
+  test_file:  "test_df.xlsx"
+  text_col:   "texto"
+  label_col:  "etiqueta"
