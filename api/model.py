@@ -1,16 +1,18 @@
-from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
-from . import settings
-import os
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
+import torch
+from .settings import tools_settings as settings
 
-try:
-    tokenizer = AutoTokenizer.from_pretrained(os.getenv.HF_MODEL_NAME)
-    model_hf  = AutoModelForSequenceClassification.from_pretrained(settings.HF_MODEL_NAME)
-    nlp = pipeline("text-classification", model=model_hf, tokenizer=tokenizer)
+tokenizer = AutoTokenizer.from_pretrained(settings.MODEL_DIR)
+model     = AutoModelForSequenceClassification.from_pretrained(settings.MODEL_DIR)
 
-    def predict_proba(txt: str) -> float:
-        res = nlp(txt, truncation=True, max_length=512)[0]
-        score = float(res['score'])
-        return score if res['label'].upper().startswith('POS') else 1 - score
-except Exception as e:
-    _kw = {"neumonia","fractura","tumor","hemorragia"}
-    predict_proba = lambda t: 0.9 if any(k in t.lower() for k in _kw) else 0.1
+id2label_map = {0: "No crítico", 1: "Crítico"}
+model.config.id2label = id2label_map
+model.config.label2id = {v: k for k, v in id2label_map.items()}
+
+torch_device = 0 if torch.cuda.is_available() else -1
+classifier = pipeline(
+    "text-classification",
+    model=model,
+    tokenizer=tokenizer,
+    device=torch_device
+)
