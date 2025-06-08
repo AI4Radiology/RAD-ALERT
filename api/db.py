@@ -5,15 +5,14 @@ supabase: Client = create_client(
     settings.SUPABASE_URL,
     settings.SUPABASE_KEY
 )
-
-def log_report(report_id: str, score: float, whatsapp_sent: bool) -> None:
-    supabase \
-      .table("report_log") \
-      .upsert(
-          {
+def log_report(report_id: str, score: float, whatsapp_sent: bool, critico: bool) -> None:
+    supabase.from_("report_log").upsert(
+        {
             "report_id": report_id,
             "score": score,
-            "whatsapp_sent": whatsapp_sent
-          }
-      ) \
-      .execute()
+            "whatsapp_sent": whatsapp_sent,
+            "critico": critico
+        },
+        on_conflict="report_id"
+    ).execute()
+

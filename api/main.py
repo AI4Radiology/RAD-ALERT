@@ -1,15 +1,12 @@
-from http.client import HTTPException
+from fastapi import FastAPI, Request, BackgroundTasks, HTTPException
+from fastapi.responses import JSONResponse
 import json
 import uuid
-from fastapi import FastAPI, Request, BackgroundTasks
-from fastapi.responses import JSONResponse
-from twilio.rest import Client
 from .settings import tools_settings as settings
 from .processing import process_report
 from .notifications  import send_whatsapp
 
 app = FastAPI(debug=settings.DEBUG)
-
 
 @app.post("/hl7")
 async def receive_hl7(request: Request, background_tasks: BackgroundTasks):

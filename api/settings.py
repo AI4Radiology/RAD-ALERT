@@ -31,4 +31,3 @@ class Settings(BaseSettings):
 
 
 tools_settings = Settings()
-tools_settings = Settings()
